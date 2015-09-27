@@ -6,3 +6,5 @@ before_install:
   - dzil authordeps | cpanm --quiet --notest
 install:
   - dzil listdeps | cpanm --quiet --notest
+script:
+  - dzil test
