@@ -88,19 +88,21 @@ sub _do_config {
   $self->{local_lib} = catfile($self->{home},'.local',$self->{perl_version});
   $self->{local_bin} = catfile($self->{home},'.local',$self->{perl_version},'bin');
   $self->{Ilib} = catfile($self->{home},'.local',$self->{perl_version},'lib','perl5');
+  $self->{log_file} = catfile($ENV{HOME},'.p5stack','p5stack-setup.log');
 }
 
 sub _do_setup {
   my ($self) = @_;
 
   _log('Hammering setup ...');
+  _log("Tail ".catfile('$HOME','.p5stack','p5stack-setup.log')." to follow the process ...");
 
   $self->_do_install_perl_release;
 
-  system "curl -s -L https://cpanmin.us | $self->{perl} - -l $self->{local_lib} --reinstall --no-sudo App::cpanminus local::lib";
+  system "curl -s -L https://cpanmin.us | $self->{perl} - -l $self->{local_lib} --reinstall --no-sudo App::cpanminus local::lib > $self->{log_file} 2>&1";
 
+  _log("Getting dependencies info using '$self->{deps}' ...");
   _log('Installing dependencies ...');
-  _log("Getting info using '$self->{deps}' ...");
   my $cpanm = $self->_get_cpanm;
 
   if ($self->{deps} eq 'dzil') {
@@ -160,16 +162,16 @@ sub _do_install_perl_release {
   
   _log("Configuring $self->{perl_version} release ...");
   my $prefix = catfile($self->{perls_root}, $self->{perl_version});
-  system "sh Configure -de -Dprefix=$prefix > /tmp/p5stack-setup.log 2>&1";
+  system "sh Configure -de -Dprefix=$prefix > $self->{log_file} 2>&1";
 
   _log("Building $self->{perl_version} release ...");
-  system "make >> /tmp/p5stack-setup.log 2>&1";
+  system "make >> $self->{log_file} 2>&1";
 
   _log("Testing $self->{perl_version} release ...");
-  system "make test >> /tmp/p5stack-setup.log 2>&1";
+  system "make test >> $self->{log_file} 2>&1";
 
   _log("Installing $self->{perl_version} release ...");
-  system "make install >> /tmp/p5stack-setup.log 2>&1";
+  system "make install >> $self->{log_file} 2>&1";
 
 }
 
@@ -187,7 +189,9 @@ sub _do_cpanm {
   @args = @{$self->{argv}} unless @args;
 
   my $cpanm = $self->_get_cpanm;
-  my $run = join ' ',$cpanm, "--no-sudo", "-L $self->{local_lib}", @args;
+  my $log = "";
+  $log = "> $self->{log_file} 2>&1" if $self->{command} eq 'setup';
+  my $run = join ' ', $cpanm, "--no-sudo", "-L $self->{local_lib}", @args, $log;
 
   system $run;
 }
