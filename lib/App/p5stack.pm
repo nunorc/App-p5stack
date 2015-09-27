@@ -261,12 +261,12 @@ Manage your dependencies and perl requirements locally, by projects (directory).
 
 =head1 DESCRIPTION
 
-p5stack is a tool that given a small set of configuration allows to quickly
-(in a single command) setup the required modules inside a local directory
-specific to this project. Including a specific perl version if required.
-This allows to constrain all the required elements to run your application
-to live inside the application directory. And thus not clashing to system
-wide perl installations.
+p5stack is a tool that given a small set of configuration directives allows to
+quickly (in a single command) setup the required modules inside a local directory
+specific to this project. Including a specific perl version if required. This
+allows to constrain all the required elements to run your application to live
+inside the application directory. And thus not clashing to system wide perl
+installations.
 
 Configuration files are written in YAML, an example configuration looks
 like:
@@ -282,31 +282,91 @@ modules are install in a .local directory. This way you can share perl
 releases installations, but have a local directory with the required
 modules for each project.
 
-=head1 EXAMPLE OF USE
+After setting up the environment with the required perl and modules
+using the I<setup> command:
 
-Creating a new project using Dancer:
+    $ p5stack setup
+
+You can run a command using the environment using:
+
+    $ p5stack perl <program>
+
+Or execute a program installed by a module using:
+
+    $ p5stack bin <program>
+
+You system perl and other possible installations remain unchanged.
+
+=head1 EXAMPLES OF USE
+
+L<Dancer|http://perldancer.org> is a popular framework for building
+site. Creating a new project using Dancer can be done as:
 
     $ dancer2 -a webapp
     + webapp
     (...)
 
-Setup the application environment, since the Dancer new application
-utility creates a cpanfile, we can use that to set up the application
-environment (remember to update cpanfile:
+This will create a directory called I<webapp> with a bunch of files
+inside. One of these files is a I<cpanfile> that stores the required
+modules to run the bootstrap application. To setup this new environment
+to run the application just I<cd> into the new directory and run:
 
     $ cd webapp
-    webapp$ cat > p5stack.yml
-    ---
-    perl: 5.22.0
-    deps: cpanfile
     webapp$ p5stack setup
 
-After the setup is done, a perl 5.22.0 has been install in $HOME/.p5stack
-and all the require modules have been install in .local inside your
-project. We can run the application using:
+By default p5stack will use your system perl, and will use the cpanfile
+to install in a I<.local> directory inside your application the required
+dependencies to run the application.
+
+You may require other perl version to use an application. You can write a
+configuration file, and define what version you require. For example:
+
+    $ cat > p5stack.yml
+    ---
+    perl = 5.22.0
+
+You need to run the setup again to install the new perl version and
+dependencies.
+After the setup is done, a perl 5.22.0 has been install in I<$HOME/.p5stack>
+and all the require modules have been installed in I<.local> inside your
+project.
+
+We can run the application using:
 
     webapp$ p5stack bin plackup bin/app.psgi 
     HTTP::Server::PSGI: Accepting connections at http://0:5000/
+
+=head1 COMMANDS
+
+p5stack tool is executed using commands like:
+
+    $ p5stack <command> [args]
+
+Available commands for p5stack are:
+
+=over 4
+
+=item
+
+C<setup>: build and setup the environment.
+
+=item
+
+C<perl>: run a perl interpreter.
+
+=item
+
+C<bin>: run a program installed by the setup in the environment.
+
+=item
+
+C<cpanm>: run I<cpanm> in the context of your application environment.
+
+=item
+
+C<help>: show small help info.
+
+=back
 
 =head1 CONFIGURATION
 
@@ -318,22 +378,22 @@ The currently available configuration attributes are:
 
 C<perl> defines the required perl version to run the application (eg. 5.20.3,
 5.22.0); you can also use an absolute path, or the special keyword I<system>
-which will use the corresponding perl.
+which will use the system wide perl found (using I<which>).
 
 =item
 
-C<deps> is used to set define how to gather dependencies information, current
+C<deps> is used to define how to gather dependencies information, current
 available options are:
 
 =over 4
 
 =item
 
-C<dzil>
+C<dzil>: uses I<dzil listdeps> to find out the list of requirements.
 
 =item
 
-C<cpanfile>
+C<cpanfile>: I<cpanm> reads this file directly.
 
 =back
 
@@ -355,7 +415,7 @@ file is.
 
 =item
 
-Allow other options to set up local lib (eg. carton).
+Allow other options to set up local lib (eg. carton, DX).
 
 =item
 
@@ -369,7 +429,6 @@ More tests.
 
 =item
 
-Alberto Simões
+Alberto Simões <ambs@cpan.org>
 
 =back
-
