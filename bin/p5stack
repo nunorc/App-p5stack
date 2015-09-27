@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+# PODNAME: p5stack
+# ABSTRACT: yet another CPAN/perl release manager tool
+
+use strict;
+use warnings;
+
+use App::p5stack;
+
+my $app = App::p5stack->new(@ARGV);
+$app->run();
+
