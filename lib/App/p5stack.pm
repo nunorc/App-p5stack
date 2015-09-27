@@ -190,7 +190,7 @@ sub _do_cpanm {
 
   my $cpanm = $self->_get_cpanm;
   my $log = "";
-  $log = "> $self->{log_file} 2>&1" if $self->{command} eq 'setup';
+  $log = ">> $self->{log_file} 2>&1" if $self->{command} eq 'setup';
   my $run = join ' ', $cpanm, "--no-sudo", "-L $self->{local_lib}", @args, $log;
 
   system $run;
@@ -436,3 +436,4 @@ More tests.
 Alberto Simões <ambs@cpan.org>
 
 =back
+
