@@ -147,14 +147,14 @@ sub _do_install_perl_release {
   my $url = join '', 'http://www.cpan.org/src/5.0/', $file;
 
   _log("Downloading $self->{perl_version} release ...");
-  make_path(dirname($dest)) unless -e dirname($dest);;
+  make_path(dirname($dest)) unless -e dirname($dest);
   system "$curl -s -o $dest $url" unless -e $dest;
 
   my $curr = getcwd;
   chdir $self->{perls_root};
 
   _log("Extracting $self->{perl_version} release ...");
-  #Archive::Tar->extract_archive($file);
+  Archive::Tar->extract_archive($file);
 
   chdir catfile($self->{perls_root}, "perl-$self->{perl_version}");
   
