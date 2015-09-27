@@ -88,7 +88,7 @@ which will use the corresponding perl.
 available options are:
     - `dzil`
     - `cpanfile`
-- **localperl** if set, the required perl is installed in .local inside your
+- `localperl` if set, the required perl is installed in .local inside your
 directory project (not implemented yet).
 
 You can write the configuration in a `pstack.yml` file in your project
