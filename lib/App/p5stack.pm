@@ -187,7 +187,7 @@ sub _do_cpanm {
   @args = @{$self->{argv}} unless @args;
 
   my $cpanm = $self->_get_cpanm;
-  my $run = join ' ',$cpanm, "--no-sudo", "-l $self->{local_lib}", @args;
+  my $run = join ' ',$cpanm, "--no-sudo", "-L $self->{local_lib}", @args;
 
   system $run;
 }
