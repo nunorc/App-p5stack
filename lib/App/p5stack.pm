@@ -97,27 +97,27 @@ sub _do_setup {
 
   $self->_do_install_perl_release;
 
-  system "curl -s -L https://cpanmin.us | $self->{perl} - -l $self->{local_lib} --reinstall App::cpanminus local::lib";
+  system "curl -s -L https://cpanmin.us | $self->{perl} - -l $self->{local_lib} --reinstall --no-sudo App::cpanminus local::lib";
 
   _log('Installing dependencies ...');
   my $cpanm = $self->_get_cpanm;
 
   if ($self->{deps} eq 'dzil') {
     my $dzil = which 'dzil';
-    system "$cpanm -l $self->{local_lib} Dist::Zilla" unless $dzil;
+    $self->_do_cpanm("Dist::Zilla") unless $dzil;
 
     unless (-e 'dist.ini') {
       _log('Configuration is set to use "dzil" to gather dependencies information, but no "dist.ini" file was found in current directory.. exiting.');
       exit;
     }
-    system "$dzil listdeps | $cpanm -l $self->{local_lib}";
+    system "$dzil listdeps | $cpanm --no-sudo -l $self->{local_lib}";
   }
   if ($self->{deps} eq 'cpanfile') {
     unless (-e 'cpanfile') {
       _log('Configuration is set to use "cpanfile" to gather dependencies information, but no "cpanfile" file was found in current directory.. exiting.');
       exit;
     }
-    system "$cpanm -l $self->{local_lib} --installdeps .";
+    $self->_do_cpanm("--installdeps .");
   }
 
   print "[p5stack] Setup done, use 'p5stack perl' to run your application.\n";
@@ -185,7 +185,7 @@ sub _do_cpanm {
   my ($self) = @_;
 
   my $cpanm = $self->_get_cpanm;
-  my $run = join(' ',$cpanm, "-l $self->{local_lib}", @{$self->{argv}});
+  my $run = join(' ',$cpanm, "--no-sudo -l $self->{local_lib}", @{$self->{argv}});
   system $run;
 }
 
