@@ -100,6 +100,7 @@ sub _do_setup {
   system "curl -s -L https://cpanmin.us | $self->{perl} - -l $self->{local_lib} --reinstall --no-sudo App::cpanminus local::lib";
 
   _log('Installing dependencies ...');
+  _log("Getting info using '$self->{deps}' ...");
   my $cpanm = $self->_get_cpanm;
 
   if ($self->{deps} eq 'dzil') {
@@ -182,10 +183,12 @@ sub _do_perl {
 }
 
 sub _do_cpanm {
-  my ($self) = @_;
+  my ($self, @args) = @_;
+  @args = @{$self->{argv}} unless @args;
 
   my $cpanm = $self->_get_cpanm;
-  my $run = join(' ',$cpanm, "--no-sudo -l $self->{local_lib}", @{$self->{argv}});
+  my $run = join ' ',$cpanm, "--no-sudo", "-l $self->{local_lib}", @args;
+
   system $run;
 }
 
