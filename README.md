@@ -88,8 +88,8 @@ which will use the corresponding perl.
 available options are:
     - `dzil`
     - `cpanfile`
-- **localperl** if set, the required perl is installed in .local inside
-your directory project (not implemented yet).
+- **localperl** if set, the required perl is installed in .local inside your
+directory project (not implemented yet).
 
 You can write the configuration in a `pstack.yml` file in your project
 directory, have a `$HOME/.p5stack/p5stack.yml` configuration file,
@@ -115,11 +115,3 @@ This software is copyright (c) 2015 by Nuno Carvalho.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
-
-# POD ERRORS
-
-Hey! **The above document had some coding errors, which are explained below:**
-
-- Around line 113:
-
-    Expected '=item \*'

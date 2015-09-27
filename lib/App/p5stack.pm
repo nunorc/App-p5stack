@@ -334,8 +334,10 @@ C<cpanfile>
 
 =back
 
-=item B<localperl> if set, the required perl is installed in .local inside
-your directory project (not implemented yet).
+=item
+
+B<localperl> if set, the required perl is installed in .local inside your
+directory project (not implemented yet).
 
 =back
 
