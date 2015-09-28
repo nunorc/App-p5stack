@@ -68,6 +68,54 @@ You system perl and other possible installations remain unchanged.
 
 # EXAMPLES OF USE
 
+## Simple Example
+
+Imagine the very simple project:
+
+    $ ls
+    dist.ini  ex1
+
+which contains a perl script:
+
+    $ cat ex1 
+    #!/usr/bin/perl
+    
+    use Acme::123;
+
+    Acme::123->new->printnumbers;
+
+that requires the _Acme::123_ module, described in this simple dzil file:
+
+    $ cat dist.ini 
+    name = ex1
+
+    [Prereqs]
+    Acme::123 = 0
+
+To setup our environmet to run this using p5stack the first this is to run
+the setup command:
+
+    $ p5stack setup
+    [p5stack - Sep 28 23:58:19] Hammering setup ...
+    (...)
+
+Since there is no configuration file for p5stack by default the perl system
+is used. And a directory _.local_ is created to install all the required
+modules.
+
+    $ ls -A
+    .local  dist.ini  ex1
+
+To run the simple application, just use the _perl_ command:
+
+    $ p5stack perl ex1 
+    one 
+    two 
+    three 
+    (...)
+
+## Dancer Example
+
 [Dancer](http://perldancer.org) is a popular framework for building
 site. Creating a new project using Dancer can be done as:
 
