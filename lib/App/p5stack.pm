@@ -180,8 +180,8 @@ sub _do_perl {
 
   my $run = join(' ',$self->{perl}, "-I $self->{Ilib}",
               "-Mlocal::lib", @{$self->{argv}});
-  print $run, "\n";
-  #system $run;
+
+  system $run;
 }
 
 sub _do_cpanm {
