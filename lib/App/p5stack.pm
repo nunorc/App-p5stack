@@ -336,7 +336,8 @@ the setup command:
 
 Since there is no configuration file for p5stack, by default the sytem perl
 is used. And a directory I<.local> is created to install all the required
-modules.
+modules. The list of required dependencies is gathered using dzil by default
+(or a cpanfile if available).
 
     $ ls -A
     .local  dist.ini  ex1
