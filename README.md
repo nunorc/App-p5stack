@@ -72,12 +72,12 @@ You system perl and other possible installations remain unchanged.
 
 Imagine the very simple project:
 
-    $ ls
+    $ ls -A
     dist.ini  ex1
 
 which contains a perl script:
 
-    $ cat ex1 
+    $ cat ex1
     #!/usr/bin/perl
     
     use Acme::123;
@@ -92,7 +92,7 @@ that requires the _Acme::123_ module, described in this simple dzil file:
     [Prereqs]
     Acme::123 = 0
 
-To setup our environmet to run this using p5stack the first this is to run
+To setup our environment to run this using p5stack the first this is to run
 the setup command:
 
     $ p5stack setup
