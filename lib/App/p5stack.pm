@@ -305,12 +305,12 @@ You system perl and other possible installations remain unchanged.
 
 =head2 Simple Example
 
-Imagine the very simple project:
+Imagine a very simple project:
 
     $ ls -A
     dist.ini  ex1
 
-which contains a perl script:
+which contains a script:
 
     $ cat ex1
     #!/usr/bin/perl
@@ -319,7 +319,7 @@ which contains a perl script:
 
     Acme::123->new->printnumbers;
 
-that requires the I<Acme::123> module, described in this simple dzil file:
+that requires the Acme::123 module, as described in this simple dzil file:
 
     $ cat dist.ini 
     name = ex1
@@ -327,21 +327,21 @@ that requires the I<Acme::123> module, described in this simple dzil file:
     [Prereqs]
     Acme::123 = 0
 
-To setup our environment to run this using p5stack the first this is to run
+To setup the environment to run this using p5stack just run the tool with
 the setup command:
 
     $ p5stack setup
     [p5stack - Sep 28 23:58:19] Hammering setup ...
     (...)
 
-Since there is no configuration file for p5stack by default the perl system
+Since there is no configuration file for p5stack, by default the sytem perl
 is used. And a directory I<.local> is created to install all the required
 modules.
 
     $ ls -A
     .local  dist.ini  ex1
 
-To run the simple application, just use the I<perl> command:
+To run the simple application, just use the I<p5stack perl> command:
 
     $ p5stack perl ex1 
     one 
