@@ -1,6 +1,8 @@
 language: perl
 perl:
+  - "5.22"
   - "5.20"
+  - "5.14"
 before_install:
   - cpanm --quiet --notest Dist::Zilla
   - dzil authordeps | cpanm --quiet --notest
