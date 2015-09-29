@@ -485,7 +485,9 @@ More tests.
 
 Thank you to the authors and contributors of
 L<App-cpanminus|http://search.cpan.org/dist/App-cpanminus/>
-and  L<local-lib|http://search.cpan.org/dist/local-lib/>.
+and L<local-lib|http://search.cpan.org/dist/local-lib/>.
+
+Inspired by L<The Haskell Tool Stack|https://github.com/commercialhaskell/stack>.
 
 =head1 CONTRIBUTORS
 

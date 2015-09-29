@@ -200,7 +200,9 @@ file is.
 
 Thank you to the authors and contributors of
 [App-cpanminus](http://search.cpan.org/dist/App-cpanminus/)
-and  [local-lib](http://search.cpan.org/dist/local-lib/).
+and [local-lib](http://search.cpan.org/dist/local-lib/).
+
+Inspired by [The Haskell Tool Stack](https://github.com/commercialhaskell/stack).
 
 # CONTRIBUTORS
 
