@@ -1,3 +1,5 @@
 App-p5stack-*
 .build
 *.swp
+.local/
+p5stack.yml
