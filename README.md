@@ -66,6 +66,10 @@ Or execute a program installed by a module using:
 
 You system perl and other possible installations remain unchanged.
 
+The local installation of modules is done using 
+[App-cpanminus](http://search.cpan.org/dist/App-cpanminus/)
+and [local-lib](http://search.cpan.org/dist/local-lib/).
+
 # EXAMPLES OF USE
 
 ## Simple Example
@@ -192,9 +196,15 @@ file is.
 - Allow other options to set up local lib (eg. carton, DX).
 - More tests.
 
+# ACKNOWLEDGMENTS
+
+Thank you to the authors and contributors of
+[App-cpanminus](http://search.cpan.org/dist/App-cpanminus/)
+and  [local-lib](http://search.cpan.org/dist/local-lib/).
+
 # CONTRIBUTORS
 
-- Alberto Simões <ambs@cpan.org>
+Alberto Simões <ambs@cpan.org>
 
 # AUTHOR
 

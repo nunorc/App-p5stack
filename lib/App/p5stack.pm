@@ -301,6 +301,10 @@ Or execute a program installed by a module using:
 
 You system perl and other possible installations remain unchanged.
 
+The local installation of modules is done using 
+L<App-cpanminus|http://search.cpan.org/dist/App-cpanminus/>
+and L<local-lib|http://search.cpan.org/dist/local-lib/>.
+
 =head1 EXAMPLES OF USE
 
 =head2 Simple Example
@@ -477,13 +481,12 @@ More tests.
 
 =back
 
+=head1 ACKNOWLEDGMENTS
+
+Thank you to the authors and contributors of
+L<App-cpanminus|http://search.cpan.org/dist/App-cpanminus/>
+and  L<local-lib|http://search.cpan.org/dist/local-lib/>.
+
 =head1 CONTRIBUTORS
 
-=over 4
-
-=item
-
 Alberto Simões <ambs@cpan.org>
-
-=back
-
