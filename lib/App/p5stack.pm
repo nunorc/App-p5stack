@@ -109,14 +109,14 @@ sub _do_setup {
     my $dzil = which 'dzil';
     $self->_do_cpanm("Dist::Zilla") unless $dzil;
 
-    unless (-e 'dist.ini') {
+    unless (-e catfile($self->{home},'dist.ini')) {
       _log('Configuration is set to use "dzil" to gather dependencies information, but no "dist.ini" file was found in current directory.. exiting.');
       exit;
     }
     system "$dzil listdeps | $cpanm --no-sudo -l $self->{local_lib}";
   }
   if ($self->{deps} eq 'cpanfile') {
-    unless (-e 'cpanfile') {
+    unless (-e catfile($self->{home},'cpanfile')) {
       _log('Configuration is set to use "cpanfile" to gather dependencies information, but no "cpanfile" file was found in current directory.. exiting.');
       exit;
     }

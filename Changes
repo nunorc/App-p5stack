@@ -1,5 +1,9 @@
 
 {{$NEXT}}
 
+    * Fix setup step file paths for dist.ini and cpanfile.
+
+0.001     2015-09-29 18:09:34+01:00 Europe/Lisbon
+
     * First release.
 
