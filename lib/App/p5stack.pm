@@ -35,6 +35,7 @@ sub run {
   elsif ($self->{command} eq 'perl') { $self->_do_perl; }
   elsif ($self->{command} eq 'cpanm') { $self->_do_cpanm; }
   elsif ($self->{command} eq 'bin') { $self->_do_bin; }
+  elsif ($self->{command} eq 'run') { $self->_do_run; }
   else { $self->_do_help; }
 }
 
@@ -207,6 +208,17 @@ sub _do_bin {
   system $run;
 }
 
+sub _do_run {
+  my ($self) = @_;
+
+  my @argv = @{ $self->{argv} };
+  my $comm = shift @argv;
+  my @env = ("PERL5LIB=$self->{Ilib}", "PATH=$self->{local_bin}:\$PATH");
+  my $run = join ' ', @env, $comm, @argv;
+
+  system $run;
+}
+
 sub _get_perl_version {
   my ($perl) = @_;
 
@@ -231,7 +243,8 @@ sub _do_help {
   print "Usage:\n",
     "  \$ p5stack setup                  # setup env in current directory\n",
     "  \$ p5stack perl <program> [args]  # run a program\n",
-    "  \$ p5stack bin <file> [args]      # execute a installed bin file\n",
+    "  \$ p5stack bin <file> [args]      # execute a locally installed bin file\n",
+    "  \$ p5stack run <command> [args]   # setup env and run an arbitrary command\n",
     "  \$ p5stack cpanm [args]           # execute local env cpanm\n";
 }
 
