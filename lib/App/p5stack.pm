@@ -111,15 +111,24 @@ sub _do_setup {
   my $cpanm = $self->_get_cpanm;
 
   if ($self->{deps} eq 'dzil') {
-    my $dzil = which 'dzil';
-    $self->_do_cpanm("Dist::Zilla") unless $dzil;
 
     unless (-e catfile($self->{home},'dist.ini')) {
       _log('Configuration is set to use "dzil" to gather dependencies information, but no "dist.ini" file was found in current directory.. exiting.');
       exit;
     }
-    system "$dzil listdeps | $cpanm --no-sudo -l $self->{local_lib}";
-    $self->{cpanm_flag} = $? >> 8;
+
+    my $dzil = which 'dzil';
+    if ($dzil) {
+      system "$dzil listdeps | $cpanm --no-sudo -l $self->{local_lib}";
+      $self->{cpanm_flag} = $? >> 8;
+    }
+    else {
+      $self->_do_cpanm("Dist::Zilla");
+      my $bin = catfile($self->{local_bin}, 'dzil');
+      my @env = ("PERL5LIB=$self->{Ilib}", "PATH=$self->{local_bin}:\$PATH");
+      system join(' ', @env, "$bin listdeps | $cpanm --no-sudo -l $self->{local_lib}");
+      $self->{cpanm_flag} = $? >> 8;
+     }
   }
   if ($self->{deps} eq 'cpanfile') {
     unless (-e catfile($self->{home},'cpanfile')) {
