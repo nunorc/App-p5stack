@@ -104,6 +104,7 @@ sub _do_setup {
   $self->_do_install_perl_release;
 
   system "curl -s -L https://cpanmin.us | $self->{perl} - -l $self->{local_lib} --reinstall --no-sudo App::cpanminus local::lib > $self->{log_file} 2>&1";
+  $self->{cpanm_flag} = $? >> 8;
 
   _log("Getting dependencies info using '$self->{deps}' ...");
   _log('Installing dependencies ...');
@@ -118,6 +119,7 @@ sub _do_setup {
       exit;
     }
     system "$dzil listdeps | $cpanm --no-sudo -l $self->{local_lib}";
+    $self->{cpanm_flag} = $? >> 8;
   }
   if ($self->{deps} eq 'cpanfile') {
     unless (-e catfile($self->{home},'cpanfile')) {
@@ -127,6 +129,9 @@ sub _do_setup {
     $self->_do_cpanm("--installdeps .");
   }
 
+  if ($self->{cpanm_flag}) {
+    print "[p5stack] Warning, cpanm may have failed to install something!\n";
+  }
   print "[p5stack] Setup done, use 'p5stack perl' to run your application.\n";
 }
 
@@ -198,6 +203,7 @@ sub _do_cpanm {
   my $run = join ' ', $cpanm, "--no-sudo", "-L $self->{local_lib}", @args, $log;
 
   system $run;
+  $self->{cpanm_flag} = $? >> 8;
 }
 
 sub _do_bin {
