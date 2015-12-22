@@ -46,6 +46,7 @@ sub _do_config {
   $self->{perl} = 'system';
   $self->{deps} = 'dzil';
   $self->{skip_install} = 1;
+  $self->{p5stack_root} = catfile($ENV{HOME},'.p5stack');
   $self->{perls_root} = catfile($ENV{HOME},'.p5stack','perls');
   $self->{perl_version} = '5.20.3';
 
@@ -89,11 +90,13 @@ sub _do_config {
   $self->{local_lib} = catfile($self->{home},'.local',$self->{perl_version});
   $self->{local_bin} = catfile($self->{home},'.local',$self->{perl_version},'bin');
   $self->{Ilib} = catfile($self->{home},'.local',$self->{perl_version},'lib','perl5');
-  $self->{log_file} = catfile($ENV{HOME},'.p5stack','p5stack-setup.log');
+  $self->{log_file} = catfile($self->{p5stack_root},'p5stack-setup.log');
 }
 
 sub _do_setup {
   my ($self) = @_;
+
+  make_path($self->{p5stack_root}) unless -e $self->{p5stack_root};
 
   _log('Hammering setup ...');
   _log("Tail ".catfile('$HOME','.p5stack','p5stack-setup.log')." to follow the process ...");

@@ -1,6 +1,8 @@
 
 {{$NEXT}}
 
+    * Create p5stack directory if missing (Issue#2, reported by AMBS++).
+
 0.003     2015-11-19 22:29:12+00:00 Europe/Lisbon
 
     * Add new 'run' command (AMBS++ for comments).
