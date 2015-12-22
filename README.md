@@ -4,7 +4,7 @@ App::p5stack - manage your dependencies and perl requirements locally
 
 # VERSION
 
-version 0.003
+version 0.004
 
 # SYNOPSIS
 
