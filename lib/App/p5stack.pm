@@ -139,9 +139,9 @@ sub _do_setup {
   }
 
   if ($self->{cpanm_flag}) {
-    print "[p5stack] Warning, cpanm may have failed to install something!\n";
+    _log("[p5stack] Warning, cpanm may have failed to install something!");
   }
-  print "[p5stack] Setup done, use 'p5stack perl' to run your application.\n";
+  _log("[p5stack] Setup done, use 'p5stack perl' to run your application.");
 }
 
 sub _get_cpanm {
