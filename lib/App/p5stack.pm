@@ -18,12 +18,21 @@ sub new {
   my ($class, @argv) = @_;
   my $self = bless {}, $class;
 
-  $self->{orig_argv} = [@argv];
-  $self->{command} = @argv ? lc shift @argv : '';
-  $self->{argv} = [@argv];
+  $self->{orig_argv} = [ @argv ];
+  @argv = grep { !/^-v$/ } @argv;
 
+  $self->{verbose} = 1 if scalar(@argv) != scalar(@{$self->{orig_argv}}); 
+
+  $self->{command} = @argv ? lc shift @argv : '';
+
+  $self->{argv} = [ @argv ];
+  
   # handle config
   $self->_do_config;
+
+  if ($self->{verbose}) {
+    $self->_dump_config;
+  }
 
   return $self;
 }
@@ -31,12 +40,19 @@ sub new {
 sub run {
   my ($self) = @_;
 
-  if ($self->{command} eq 'setup') { $self->_do_setup; }
-  elsif ($self->{command} eq 'perl') { $self->_do_perl; }
+  if    ($self->{command} eq 'setup') { $self->_do_setup; }
+  elsif ($self->{command} eq 'perl')  { $self->_do_perl;  }
   elsif ($self->{command} eq 'cpanm') { $self->_do_cpanm; }
-  elsif ($self->{command} eq 'bin') { $self->_do_bin; }
-  elsif ($self->{command} eq 'run') { $self->_do_run; }
+  elsif ($self->{command} eq 'bin')   { $self->_do_bin;   }
+  elsif ($self->{command} eq 'run')   { $self->_do_run;   }
   else { $self->_do_help; }
+}
+
+sub _dump_config {
+  my ($self) = @_;
+  print STDERR Dumper($self);
+  print STDERR "\n";
+  system join(' ',$self->{perl}, "-I $self->{Ilib}", "-Mlocal::lib");
 }
 
 sub _do_config {
@@ -199,6 +215,7 @@ sub _do_perl {
   my $run = join(' ',$self->{perl}, "-I $self->{Ilib}",
               "-Mlocal::lib", @{$self->{argv}});
 
+  print STDERR "Running: $run\n" if $self->{verbose};
   system $run;
 }
 
