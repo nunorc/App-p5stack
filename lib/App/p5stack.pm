@@ -19,9 +19,11 @@ sub new {
   my $self = bless {}, $class;
 
   $self->{orig_argv} = [ @argv ];
-  @argv = grep { !/^-v$/ } @argv;
-
-  $self->{verbose} = 1 if scalar(@argv) != scalar(@{$self->{orig_argv}}); 
+  
+  ## treat flags only if before the "command"
+  while (@argv && $argv[0] =~ /^-/) {
+    $self->_activate_flag(shift @argv)
+  }
 
   $self->{command} = @argv ? lc shift @argv : '';
 
@@ -29,12 +31,15 @@ sub new {
   
   # handle config
   $self->_do_config;
-
-  if ($self->{verbose}) {
-    $self->_dump_config;
-  }
-
+  $self->_dump_config if $self->{debug};
+  
   return $self;
+}
+
+sub _activate_flag {
+  my ($self, $flag) = @_;
+  if ($flag eq "-D") { $self->{debug} = 1; }
+  # FIXME: complin on unknown flags?
 }
 
 sub run {
@@ -51,8 +56,6 @@ sub run {
 sub _dump_config {
   my ($self) = @_;
   print STDERR Dumper($self);
-  print STDERR "\n";
-  system join(' ',$self->{perl}, "-I $self->{Ilib}", "-Mlocal::lib");
 }
 
 sub _do_config {
@@ -62,8 +65,8 @@ sub _do_config {
   $self->{perl} = 'system';
   $self->{deps} = 'dzil';
   $self->{skip_install} = 1;
-  $self->{p5stack_root} = catfile($ENV{HOME},'.p5stack');
-  $self->{perls_root} = catfile($ENV{HOME},'.p5stack','perls');
+  $self->{p5stack_root} = catfile($ENV{HOME}, '.p5stack');
+  $self->{perls_root}   = catfile($ENV{HOME}, '.p5stack', 'perls');
   $self->{perl_version} = '5.20.3';
 
   # guess stuff from context
@@ -212,10 +215,10 @@ sub _do_install_perl_release {
 sub _do_perl {
   my ($self) = @_;
 
-  my $run = join(' ',$self->{perl}, "-I $self->{Ilib}",
-              "-Mlocal::lib", @{$self->{argv}});
+  my $run = join(' ',$self->{perl}, "-I$self->{Ilib}",
+              "-Mlocal::lib=$self->{local_lib}", @{$self->{argv}});
 
-  print STDERR "Running: $run\n" if $self->{verbose};
+  print STDERR "Running: $run\n" if $self->{debug};
   system $run;
 }
 
