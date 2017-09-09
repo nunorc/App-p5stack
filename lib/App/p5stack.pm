@@ -31,11 +31,11 @@ sub new {
 sub run {
   my ($self) = @_;
 
-  if ($self->{command} eq 'setup') { $self->_do_setup; }
-  elsif ($self->{command} eq 'perl') { $self->_do_perl; }
+  if    ($self->{command} eq 'setup') { $self->_do_setup; }
+  elsif ($self->{command} eq 'perl')  { $self->_do_perl; }
   elsif ($self->{command} eq 'cpanm') { $self->_do_cpanm; }
-  elsif ($self->{command} eq 'bin') { $self->_do_bin; }
-  elsif ($self->{command} eq 'run') { $self->_do_run; }
+  elsif ($self->{command} eq 'bin')   { $self->_do_bin; }
+  elsif ($self->{command} eq 'run')   { $self->_do_run; }
   else { $self->_do_help; }
 }
 
@@ -86,11 +86,11 @@ sub _do_config {
   }
 
   # set more stuff
-  $self->{home} = getcwd;
+  $self->{home}      = getcwd;
   $self->{local_lib} = catfile($self->{home},'.local',$self->{perl_version});
   $self->{local_bin} = catfile($self->{home},'.local',$self->{perl_version},'bin');
-  $self->{Ilib} = catfile($self->{home},'.local',$self->{perl_version},'lib','perl5');
-  $self->{log_file} = catfile($self->{p5stack_root},'p5stack-setup.log');
+  $self->{Ilib}      = catfile($self->{home},'.local',$self->{perl_version},'lib','perl5');
+  $self->{log_file}  = catfile($self->{p5stack_root},'p5stack-setup.log');
 }
 
 sub _do_setup {
@@ -138,10 +138,20 @@ sub _do_setup {
     $self->_do_cpanm("--installdeps .");
   }
 
+  $self->_do_perl5lib_link();
+
   if ($self->{cpanm_flag}) {
     _log("[p5stack] Warning, cpanm may have failed to install something!");
   }
   _log("[p5stack] Setup done, use 'p5stack perl' to run your application.");
+}
+
+sub _do_perl5lib_link {
+  my ($self) = @_;
+
+  my $target = catfile($self->{home}, '.local', 'perl5lib');
+  unlink $target if -e $target;
+  symlink $self->{Ilib}, $target;
 }
 
 sub _get_cpanm {
