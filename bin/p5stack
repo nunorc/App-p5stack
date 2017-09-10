@@ -10,3 +10,14 @@ use App::p5stack;
 my $app = App::p5stack->new(@ARGV);
 $app->run();
 
+=head1 Options
+
+=over 4
+
+=item C<-D>
+
+Activates debug mode. Dump configuration varibles, and some other useful debug information.
+
+=back
+
+=cut
