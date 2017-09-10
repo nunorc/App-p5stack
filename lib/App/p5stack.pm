@@ -18,25 +18,44 @@ sub new {
   my ($class, @argv) = @_;
   my $self = bless {}, $class;
 
-  $self->{orig_argv} = [@argv];
-  $self->{command} = @argv ? lc shift @argv : '';
-  $self->{argv} = [@argv];
+  $self->{orig_argv} = [ @argv ];
+  
+  ## treat flags only if before the "command"
+  while (@argv && $argv[0] =~ /^-/) {
+    $self->_activate_flag(shift @argv)
+  }
 
+  $self->{command} = @argv ? lc shift @argv : '';
+
+  $self->{argv} = [ @argv ];
+  
   # handle config
   $self->_do_config;
-
+  $self->_dump_config if $self->{debug};
+  
   return $self;
+}
+
+sub _activate_flag {
+  my ($self, $flag) = @_;
+  if ($flag eq "-D") { $self->{debug} = 1; }
+  # FIXME: complin on unknown flags?
 }
 
 sub run {
   my ($self) = @_;
 
   if    ($self->{command} eq 'setup') { $self->_do_setup; }
-  elsif ($self->{command} eq 'perl')  { $self->_do_perl; }
+  elsif ($self->{command} eq 'perl')  { $self->_do_perl;  }
   elsif ($self->{command} eq 'cpanm') { $self->_do_cpanm; }
-  elsif ($self->{command} eq 'bin')   { $self->_do_bin; }
-  elsif ($self->{command} eq 'run')   { $self->_do_run; }
+  elsif ($self->{command} eq 'bin')   { $self->_do_bin;   }
+  elsif ($self->{command} eq 'run')   { $self->_do_run;   }
   else { $self->_do_help; }
+}
+
+sub _dump_config {
+  my ($self) = @_;
+  print STDERR Dumper($self);
 }
 
 sub _do_config {
@@ -46,8 +65,8 @@ sub _do_config {
   $self->{perl} = 'system';
   $self->{deps} = 'dzil';
   $self->{skip_install} = 1;
-  $self->{p5stack_root} = catfile($ENV{HOME},'.p5stack');
-  $self->{perls_root} = catfile($ENV{HOME},'.p5stack','perls');
+  $self->{p5stack_root} = catfile($ENV{HOME}, '.p5stack');
+  $self->{perls_root}   = catfile($ENV{HOME}, '.p5stack', 'perls');
   $self->{perl_version} = '5.20.3';
 
   # guess stuff from context
@@ -206,9 +225,10 @@ sub _do_install_perl_release {
 sub _do_perl {
   my ($self) = @_;
 
-  my $run = join(' ',$self->{perl}, "-I $self->{Ilib}",
-              "-Mlocal::lib", @{$self->{argv}});
+  my $run = join(' ',$self->{perl}, "-I$self->{Ilib}",
+              "-Mlocal::lib=$self->{local_lib}", @{$self->{argv}});
 
+  print STDERR "Running: $run\n" if $self->{debug};
   system $run;
 }
 
