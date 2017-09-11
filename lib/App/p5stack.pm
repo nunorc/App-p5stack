@@ -148,7 +148,7 @@ sub _get_cpanm {
   my ($self) = @_;
 
   my $cpanm = catfile($self->{local_lib}, 'bin', 'cpanm');
-  $cpanm = which 'cpanm' unless $cpanm;  # FIXME default to system?
+  $cpanm = which 'cpanm' unless -e $cpanm;  # FIXME default to system?
 
   return $cpanm;
 }
