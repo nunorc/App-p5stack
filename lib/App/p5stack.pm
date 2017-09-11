@@ -55,8 +55,8 @@ sub _do_config {
 
   # read config from file if available
   my $file;
-  -e 'p5stack.yml' and $file = 'p5stack.yml';
   -e "$ENV{HOME}.p5stack/p5stack.yml" and $file = "$ENV{HOME}.p5stack/p5stack.yml";  # FIXME
+  -e 'p5stack.yml' and $file = 'p5stack.yml';
   $ENV{P5STACKCFG} and $file = $ENV{P5STACKCFG};
 
   my $config;
