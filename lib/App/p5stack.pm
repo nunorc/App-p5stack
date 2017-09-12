@@ -19,7 +19,7 @@ sub new {
   my $self = bless {}, $class;
 
   $self->{orig_argv} = [ @argv ];
-  
+
   ## treat flags only if before the "command"
   while (@argv && $argv[0] =~ /^-/) {
     $self->_activate_flag(shift @argv)
@@ -28,11 +28,11 @@ sub new {
   $self->{command} = @argv ? lc shift @argv : '';
 
   $self->{argv} = [ @argv ];
-  
+
   # handle config
   $self->_do_config;
   $self->_dump_config if $self->{debug};
-  
+
   return $self;
 }
 
@@ -129,14 +129,14 @@ sub _do_setup {
   _log('Installing dependencies ...');
   my $cpanm = $self->_get_cpanm;
 
+  ## Dist::Zilla logic
   if ($self->{deps} eq 'dzil') {
-
     unless (-e catfile($self->{home},'dist.ini')) {
       _log('Configuration is set to use "dzil" to gather dependencies information, but no "dist.ini" file was found in current directory.. exiting.');
       exit;
     }
 
-    my $dzil = which 'dzil';
+    my $dzil = which 'dzil';  ## FIXME: shouldn't we look for a local dzil, or is it irrelevant?
     if ($dzil) {
       system "$dzil listdeps | $cpanm --no-sudo -l $self->{local_lib}";
       $self->{cpanm_flag} = $? >> 8;
@@ -149,8 +149,10 @@ sub _do_setup {
       $self->{cpanm_flag} = $? >> 8;
      }
   }
+
+  ## cpanfile logic
   if ($self->{deps} eq 'cpanfile') {
-    unless (-e catfile($self->{home},'cpanfile')) {
+    unless (-e catfile($self->{home}, 'cpanfile')) {
       _log('Configuration is set to use "cpanfile" to gather dependencies information, but no "cpanfile" file was found in current directory.. exiting.');
       exit;
     }
@@ -206,7 +208,7 @@ sub _do_install_perl_release {
   Archive::Tar->extract_archive($file);
 
   chdir catfile($self->{perls_root}, "perl-$self->{perl_version}");
-  
+
   _log("Configuring $self->{perl_version} release ...");
   my $prefix = catfile($self->{perls_root}, $self->{perl_version});
   system "sh Configure -de -Dprefix=$prefix > $self->{log_file} 2>&1";
@@ -220,6 +222,7 @@ sub _do_install_perl_release {
   _log("Installing $self->{perl_version} release ...");
   system "make install >> $self->{log_file} 2>&1";
 
+  chdir $curr; # go back
 }
 
 sub _do_perl {
