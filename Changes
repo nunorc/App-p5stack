@@ -1,6 +1,8 @@
 
 {{$NEXT}}
 
+    * Fix bug when building perl, where p5stack won't get back to
+      working folder (Issue#8).
     * Replace prints with log calls (Issue#4, reported by AMBS++).
 
 0.004     2015-12-22 12:30:30+00:00 Europe/Lisbon
