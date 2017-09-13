@@ -8,7 +8,7 @@ use Cwd;
 use File::Which;
 use File::Basename;
 use File::Spec::Functions;
-use File::Path qw/make_path/;
+use File::Path qw/make_path rmtree/;
 use Path::Tiny;
 use Archive::Tar;
 use Data::Dumper;
@@ -207,7 +207,8 @@ sub _do_install_perl_release {
   _log("Extracting $self->{perl_version} release ...");
   Archive::Tar->extract_archive($file);
 
-  chdir catfile($self->{perls_root}, "perl-$self->{perl_version}");
+  my $sourcefolder = catfile($self->{perls_root}, "perl-$self->{perl_version}");
+  chdir $sourcefolder;
 
   _log("Configuring $self->{perl_version} release ...");
   my $prefix = catfile($self->{perls_root}, $self->{perl_version});
@@ -223,6 +224,9 @@ sub _do_install_perl_release {
   system "make install >> $self->{log_file} 2>&1";
 
   chdir $curr; # go back
+
+  # Cleanup build files
+  rmtree($sourcefolder);
 }
 
 sub _do_perl {
