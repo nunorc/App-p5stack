@@ -426,7 +426,7 @@ To run the simple application, just use the I<p5stack perl> command:
 =head2 Dancer Example
 
 L<Dancer|http://perldancer.org> is a popular framework for building
-site. Creating a new project using Dancer can be done as:
+websites. Creating a new project using Dancer can be done as:
 
     $ dancer2 -a webapp
     + webapp
@@ -454,7 +454,7 @@ configuration file, and define what version you require. For example:
 You need to run the setup again to install the new perl version and
 dependencies.
 After the setup is done, a perl 5.22.0 has been install in I<$HOME/.p5stack>
-and all the require modules have been installed in I<.local> inside your
+and all the required modules have been installed in I<.local> inside your
 project.
 
 We can run the application using:
